@@ -1,0 +1,25 @@
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+
+class MLP(nn.Module):
+
+    def __init__(self, layers):
+        super().__init__()
+        
+        net = []
+        for i in range(len(layers) - 1):
+            net.append(nn.Linear(layers[i], layers[i+1]))
+            if i < len(layers) - 2:
+                net.append(nn.Tanh())    #tanh en fonction d activation partout sauf à la fin 
+                
+        self.net = nn.Sequential(*net)
+
+        for m in self.net:         # on égalise les variance en back et foward prop pour éviter le gradient vanishing avec les données de départ
+            if isinstance(m, nn.Linear):  # on prends juste les sorties de chaque couches
+                nn.init.xavier_normal_(m.weight)
+                nn.init.zeros_(m.bias)
+                
+
+    def forward(self, x):
+        return self.net(x)
