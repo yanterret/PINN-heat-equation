@@ -92,7 +92,9 @@ Pour la 2ᵉ méthode, j'ai divisé mes 3000 epochs d'entraînement en 2 parties
 * l'une où Adam fonctionne avec un calcul de pas adaptatif du solveur (méthode CosineAnnealingLR) pour plus de performance (2900 epochs)
 
 avec CosineAnnealingLR qui recalcule le pas du solveur Adam avec la formule :
-$$ \text{lr(epoch)} = \eta_{min} + 0.5(lr_{initial} - \eta_{min})(1 + \cos(\pi \cdot \frac{epoch}{T_{max}})) $$
+```math
+\text{lr(epoch)} = \eta_{min} + 0.5 \,(lr_{initial} - \eta_{min})\left(1 + \cos\left(\pi \cdot \frac{epoch}{T_{max}}\right)\right)
+```
 
 Elle sert à avoir un grand learning rate au début pour trouver la zone où se situe le minimum, puis à le réduire pour entrer plus facilement dans la cuve. J'ai posé $T_{max}$ égal au nombre d'epochs et $\eta_{min}$ égal à $10^{-5}$, une valeur standard pour ce solveur.
 
@@ -114,10 +116,16 @@ On remarque que CosineAnnealingLR permet de tomber à chaque fois dans la bonne 
 ## Le problème physique
 
 Ce code permet de simuler la diffusion de la chaleur, représentée par la température T, dans un barreau à une dimension x et dans le temps t, qui respecte l'équation :
-$$\partial_{t}T - \partial^{2}_{xx}T = f(x,t)\quad(1), \quad x\in(-1,1),\quad t\in(0,1)$$
+
+```math
+\partial_{t}T - \partial^{2}_{xx}T = f(x,t)\quad(1), \quad x\in(-1,1),\quad t\in(0,1)
+```
 
 avec T(x,t), le champ de température qui respecte les conditions aux limites (2) :
-$$\left\{\begin{array}{l} \text{dans l'espace} \quad T(-1,t)=T(1,t)=0 \\ \text{dans le temps} \quad T(x,0)=\sin(\pi x) \end{array}\right.$$
+
+```math
+\left\{\begin{array}{l} \text{dans l'espace} \quad T(-1,t)=T(1,t)=0 \\ \text{dans le temps} \quad T(x,0)=\sin(\pi x) \end{array}\right.
+```
 
 Dans notre cas, on prendra $f(x,t) = (\pi^{2} - 1) e^{-t}\sin(\pi x)$ pour illustrer de manière optimale les performances du modèle.
 On retrouve cette expression en prenant la solution exacte définie par $T(x,t) = e^{-t}\sin(\pi x)$, qui correspond à la solution de l'équation de la chaleur pour $(x,t)\in(-1,1)\times(0,1)$, puis en l'injectant dans (1).
@@ -131,7 +139,10 @@ Pour résoudre cette équation, on aura besoin d'un maillage et d'un réseau de 
 ($N_{pde}$ faisant référence au nombre de points de collocation qui doivent respecter l'équation de diffusion de la chaleur.)
 
 Pour ce faire, un réseau est constitué de la manière suivante, par neurone :
-$$a^{k+1}_{j} = g\!\left(\sum_{i} w^{k}_{ji}\, a^{k}_{i} + b^{k}_{j}\right)$$
+
+```math
+a^{k+1}_{j} = g\!\left(\sum_{i} w^{k}_{ji}\, a^{k}_{i} + b^{k}_{j}\right)
+```
 
 avec :
 * $k$ : le numéro de la couche
@@ -152,7 +163,7 @@ Ainsi, le premier critère élimine ReLU, qui donne une dérivée seconde nulle 
 
 ##### Le choix des paramètres
 
-Ainsi, par backpropagation, on optimise les coefficients $\theta = (w^{k}_{ij}, b^{k}_{j})$ du réseau pour que la sortie $y_{\theta}(x,t)$, qui dépend de ces mêmes paramètres, donne $y_{\theta}(x,t) \approx T(x,t)$.
+Ainsi, par backpropagation, on optimise les coefficients  $`\theta = (w^{k}_{ij}, b^{k}_{j})`$ du réseau pour que la sortie $y_{\theta}(x,t)$, qui dépend de ces mêmes paramètres, donne $y_{\theta}(x,t) \approx T(x,t)$.
 
 Cette optimisation se fait par la minimisation des fonctions de coût suivantes, avec $d_{p}^{pde}$ qui correspond à $(x_{p},t_{p})$, où $p\in(0,N_{pde})$, qui constituent l'entrée du réseau, donc notre maillage fixe à l'intérieur du domaine :
 
@@ -161,6 +172,7 @@ $$Loss_{pde}(\theta) = \frac{1}{N_{pde}}\sum_{p\in(0,N_{pde})} (\partial_{t}y_{\
 qui est une MSE pour que les points de collocation approximent le plus fidèlement possible (1).
 
 Pour l'extérieur, on prendra de la même manière $d_{p}^{CI}$, le maillage aux bords, avec $(x_{p},t_{p})$, où $p\in(0,N_{CI})$ ; on notera $y_{CI}$ les points des conditions initiales traduisant (2) :
+
 $$Loss_{CI}(\theta) = \frac{1}{N_{CI}}\sum_{p\in(0,N_{CI})} (y_{\theta}[d_{p}^{CI}] - y_{CI} )^{2} $$
 
 qui est une MSE pour que les points aux bords approximent le plus fidèlement possible (2).
