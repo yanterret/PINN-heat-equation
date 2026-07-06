@@ -9,7 +9,6 @@ En m'appuyant sur ce code de référence, j'ai acquis le squelette d'un PINN, pu
 - **Influence de l'initialisation Xavier** sur la convergence
 - **Comparaison des optimiseurs** Adam seul vs Adam + CosineAnnealingLR + L-BFGS
 
-Toutes les mesures sont réalisées sur plusieurs seeds (10 à 30) pour distinguer un effet réel de la variance d'entraînement.
 
 ## Mes résultats clés
 
@@ -85,7 +84,7 @@ Xavier n'a pas d'influence ici : il sert surtout à faire décroître l'écart-t
 
 ### Test de deux solveurs
 
-Maintenant que l'on a vu que l'initialisation des poids a peu d'importance, et que nous avons l'architecture optimale pour le moindre temps de calcul (3c × 32), j'ai testé la différence de performance — en résultat et en temps de calcul — entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
+Maintenant que l'on a vu que l'initialisation des poids a peu d'importance,j'ai pris le modéle (3c × 32) pour réduire le temps de calcul et testé la diférence de performance — en résultat et en temps de calcul — entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
 
 Pour la 2ᵉ méthode, j'ai divisé mes 3000 epochs d'entraînement en 2 parties :
 
@@ -191,6 +190,14 @@ Pour plus de lisibilité, j'ai découpé le code en plusieurs sections :
 * création des fonctions Loss
 * boucle d'entraînement
 * test du modèle
+
+## Critique de la méthode par PINN
+
+On nuancera l'efficacité de cette méthode de résolution avec, par exemple, la **méthode odeint** vue dans l'UE MINI aux Arts et Métiers, qui servait déjà de méthode de référence. Dans ce cadre-là, on observe une erreur de 7,59·10⁻⁵ % en 14 lignes de code et moins d'une seconde de calcul.
+
+Ce résultat est bien inférieur à celui de n'importe quel réseau entraîné : sur des problèmes simples, les méthodes traditionnelles (différences finies, discrétisations, odeint..) sont plus performantes. Les PINN sont eux plus intéressants sur des problèmes de dimension plus élevée ou lorsqu'on veut résoudre le problème inverse (on a le champ de température et on veut obtenir les constantes de l'équation de la chaleur).
+
+Ce repo sert avant tout de tutoriel pour s'emparer des techniques de résolution par PINN pour ensuite s'attaquer à des problémes ou il est pertinent de l'utiliser.
 
 ## Crédits et licence
 
