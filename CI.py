@@ -1,3 +1,7 @@
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+
 # On crée les points à l'intérieur du domaine
 # j'ai défini sur numpy  mais c est faisable aussi avec des fonctions pytorch
 
@@ -38,3 +42,6 @@ y_bc_np = np.vstack([y_ci, y_cl_l, y_cl_r])     #shape (1000, 1)
 
 x_bc = torch.tensor(x_bc_np).float()        #transforme le float 64 en 32
 y_bc = torch.tensor(y_bc_np).float()
+
+def source_fn(x_torch, t_torch):
+    return (np.pi**2 - 1) * torch.exp(-t_torch) * torch.sin(np.pi * x_torch)
