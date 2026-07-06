@@ -26,7 +26,6 @@ T0 = np.sin(np.pi * Vx)
 # méthode odeint
 S = odeint(discretisation, T0, Vt) # shape (nt, nx+1)
 
--
 X, T = np.meshgrid(Vx, Vt, indexing='xy')
 
 erreur = np.sqrt(np.sum((S - exact(X, T))**2)) / np.sqrt(np.sum(exact(X, T)**2))

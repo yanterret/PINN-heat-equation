@@ -1,8 +1,10 @@
 import torch
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 import numpy as np
 from PINN import MLP
 from Loss import total_loss 
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+from CI import source_fn
+from erreur_finale import u_exact
 
 def points(seed, n_pde=5000, N_CI=500, N_CL=250):
     """Régénère TOUTES les données sous contrôle de la seed."""

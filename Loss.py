@@ -2,11 +2,6 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-from CI import x_bc
-from CI import y_bc
-from CI import x_pde
-from PINN import MLP
-
 #Loss MSE sur les CI.
 
 def loss_bc(model, x_bc, y_bc):

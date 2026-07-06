@@ -1,6 +1,6 @@
+import torch
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
