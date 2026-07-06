@@ -15,6 +15,8 @@ LAYERS  = [2, 32, 32, 32, 1]
 LR      = 1e-3
 EPOCHS  = 3000
 RESAMPLE_FREQ = 500
+W_BC    = 100.0
+W_PDE   = 1.0
 
 # Modèle et optimiseur
 
@@ -32,7 +34,7 @@ history = {'loss': [], 'l_bc': [], 'l_pde': []}
 for epoch in range(EPOCHS):
 
     optimizer.zero_grad()
-    loss, l_bc, l_pde = total_loss(model, x_bc_d, y_bc_d, x_pde_d,w_bc=w_bc, w_pde=w_pde,alpha=1.0, source_fn=source_fn)
+    loss, l_bc, l_pde = total_loss(model, x_bc_d, y_bc_d, x_pde_d,w_bc=W_BC, w_pde=W_PDE,alpha=1.0, source_fn=source_fn)
     loss.backward()
     optimizer.step()
 

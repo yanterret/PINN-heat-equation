@@ -20,7 +20,7 @@ def loss_bc(model, x_bc, y_bc):
 
     """
     pred = model(x_bc)
-    return torch.mean( (pred - y_bc)**2) # torch.float32 torch.Size([]) (scalaire)
+    return torch.mean( (pred - y_bc)**2) # torch.float32 torch.Size([]) 
 
 def loss_pde(model, x_pde, alpha=1.0, source_fn=None):
     """
@@ -57,7 +57,7 @@ def loss_pde(model, x_pde, alpha=1.0, source_fn=None):
     # résidu ( équation de la chaleur)
     
     residu = dT_dt - alpha * dT_dx2 - f   #torch.Size([5000, 1])
-    return torch.mean(residu ** 2)   # torch.float32 torch.Size([]) (scalaire)
+    return torch.mean(residu ** 2)   # torch.float32 torch.Size([]) 
 
 def total_loss(model, x_bc, y_bc, x_pde,
                w_bc=100.0, w_pde=1.0,
@@ -73,5 +73,5 @@ def total_loss(model, x_bc, y_bc, x_pde,
     """
     l_bc  = loss_bc(model, x_bc, y_bc)
     l_pde = loss_pde(model, x_pde, alpha=alpha, source_fn=source_fn)
-    loss  = w_bc * l_bc + w_pde * l_pde  # torch.float32 torch.Size([]) (scalaire) 
+    loss  = w_bc * l_bc + w_pde * l_pde  # torch.float32 torch.Size([]) 
     return loss, l_bc, l_pde

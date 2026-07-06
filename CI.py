@@ -24,7 +24,7 @@ x_ci[:,0] = np.linspace(-1, 1, N_CI)   # x compris entre (-1 et 1)
 x_ci[:,1] = 0.0                        # t=0
 y_ci      = np.sin(np.pi * x_ci[:,0:1])   #shape (500, 1)
 
-# conditions en t=-1
+# conditions en x=-1
 x_cl_l      = np.zeros((N_CL, 2))       #shape (N_CL = 250 , 2)
 x_cl_l[:,0] = -1.0
 x_cl_l[:,1] = np.linspace(0, 1, N_CL)
