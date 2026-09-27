@@ -53,7 +53,7 @@ for epoch in range(100):
     optimizer_lbfgs.step(closure)
     loss, l_bc, l_pde = total_loss(model, x_bc_d, y_bc_d, x_pde_d, source_fn=source_fn)
     
-    history['loss'].append(loss.item())
+    history['loss'].append(loss.item()) #.item() pour donner un int 
     history['l_bc'].append(l_bc.item())
     history['l_pde'].append(l_pde.item())
     if epoch % 20 == 0:

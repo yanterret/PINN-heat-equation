@@ -79,7 +79,7 @@ architectures = {
     "5c x 8" : [2,8,8,8,8,8,1],
 }
 
-SEEDS = list(range(1, 31))
+SEEDS = list(x for x in range(1, 31))
 
 resultats = {}
 for nom, layers in architectures.items():
@@ -90,5 +90,4 @@ for nom, layers in architectures.items():
     print(f"{nom}")
     print(f"  moyenne : {erreurs.mean()}   médiane : {np.median(erreurs)}")
     print(f"  std     : {erreurs.std()}   min/max : {erreurs.min()} / {erreurs.max()}")
-    print(f"  valeurs triées : {[f'{e:.2%}' for e in sorted(erreurs)]}")
     print(f"  runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
