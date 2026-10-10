@@ -16,7 +16,7 @@ En m'appuyant sur ce code de référence, j'ai acquis le squelette d'un PINN, pu
 
 **Objectif :** déterminer la meilleure architecture (nombre de neurones et de couches) pour résoudre ce problème.
 
-**Protocole :** on prendra 30 seeds qui fixent les points de collocation dans le domaine, afin de mesurer les performances indépendamment d'un maillage particulier. Optimiseur Adam, avec Xavier.
+**Protocole :** on prendra 30 seeds qui fixent les points de collocation dans le domaine, afin de mesurer les performances indépendamment d'un maillage particulier. Optimiseur Adam, sans Xavier.
 
 Un réseau est noté i c × j, avec i le nombre de couches cachées et j le nombre de neurones par couche. Le nombre de paramètres est calculé en sommant, sur chaque couche, la taille de la matrice des poids et le nombre de biais :
 
@@ -80,7 +80,7 @@ Pour cela, j'ai reproduit le même protocole, mais avec 10 seeds différentes, s
 | Oui | 0,80 % | 1,47 %
 | Non | 0,37 % | 1,66 %
 
-Xavier n'a pas d'influence ici : il sert surtout à faire décroître l'écart-type. En effet, il permet d'éviter le *gradient vanishing* dans les réseaux profonds ; or, sur un problème physique simple qui ne nécessite pas un gros réseau, ce n'est pas le facteur limitant. Le solveur sera donc un sujet plus important à traiter. Xavier est donc retiré par la suite, pour économiser du temps de calcul (aussi minime soit-il).
+Xavier n'a pas d'influence ici or il sert normalement à faire décroître l'écart-type. En effet, il pest censé éviter le *gradient vanishing* dans les réseaux profonds. Or, sur un problème physique simple qui ne nécessite pas un gros réseau de neurones ce n'est pas le facteur limitant. Le solveur sera donc un sujet plus important à traiter. Xavier est donc retiré par la suite, pour économiser du temps de calcul (aussi minime soit-il).
 
 ### Test de deux solveurs
 
