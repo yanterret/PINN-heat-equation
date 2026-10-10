@@ -15,7 +15,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #################
 # importation des fonctions
 #################
-from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh,train
+from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
 
 #################
 # paramétres de la simulation
@@ -39,7 +39,8 @@ RESAMPLE_FREQ = 500
 #################
 
 history = {'loss': [], 'l_bc': [], 'l_pde': []}
-resultats = {}
+resultats = []
+temps = []
 for seed in SEEDS:
 
     torch.manual_seed(seed)
@@ -69,18 +70,24 @@ for seed in SEEDS:
 
         if epoch % RESAMPLE_FREQ == 0:
             print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
+        T_final = time.perf_counter() - t_tot
+        err_model = test_mesh(N_test, u_exact, model)
 
-    #################
-    # Visualisation des résultats
-    #################
-    T_final = time.perf_counter() - t_tot
-    err_model = test_mesh(N_test,u_exact,model)
-    resultats[seed] = err_model
-    n_rates = (err_model > 0.02).sum()
-    print(f'Temps_tot: {T_final :.4e}')
-    print(f"  moyenne : {err_model.mean()}   médiane : {np.median(err_model)}")
-    print(f"  std     : {err_model.std()}   min/max : {err_model.min()} / {err_model.max()}")
-    print(f"  runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
+        resultats.append(err_model)
+        temps.append(T_final)
+
+        print(f"seed {seed:2d} | erreur L2 : {err_model:.4%} | temps : {T_final:.1f} s")
+
+#################
+# Statistiques sur l'ensemble des seeds
+#################
+erreurs = np.array(resultats)
+n_rates = (erreurs > 0.02).sum()
+
+print(f"\nmoyenne : {erreurs.mean():.4%}   médiane : {np.median(erreurs):.4%}")
+print(f"std     : {erreurs.std():.4%}   min/max : {erreurs.min():.4%} / {erreurs.max():.4%}")
+print(f"runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
+print(f"temps moyen : {np.mean(temps):.1f} s")
 
 #################
 # Sauvegarde des résultats
@@ -88,13 +95,18 @@ for seed in SEEDS:
 os.makedirs("resultats", exist_ok=True)
 
 with open("resultats/train_adam.csv", "w") as f:
-    f.write("moyenne,mediane,std,min,max,runs_rates")
+    f.write("optimizer,moyenne,mediane,std,min,max,runs_rates,temps_moyen")
+    for seed in SEEDS:
+        f.write(f",seed{seed}")
     f.write("\n")
-    for erreurs in resultats.items():
-        f.write(f",{erreurs.mean():.6f}")
-        f.write(f",{np.median(erreurs):.6f}")
-        f.write(f",{erreurs.std():.6f}")
-        f.write(f",{erreurs.min():.6f}")
-        f.write(f",{erreurs.max():.6f}")
-        f.write(f",{(erreurs > 0.02).sum()}")
-        f.write("\n")
+    f.write("adam")
+    f.write(f",{erreurs.mean():.6f}")
+    f.write(f",{np.median(erreurs):.6f}")
+    f.write(f",{erreurs.std():.6f}")
+    f.write(f",{erreurs.min():.6f}")
+    f.write(f",{erreurs.max():.6f}")
+    f.write(f",{n_rates}")
+    f.write(f",{np.mean(temps):.2f}")
+    for err in erreurs:
+        f.write(f",{err:.6f}")
+    f.write("\n")
