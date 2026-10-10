@@ -70,13 +70,12 @@ for seed in SEEDS:
 
         if epoch % RESAMPLE_FREQ == 0:
             print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
-        T_final = time.perf_counter() - t_tot
-        err_model = test_mesh(N_test, u_exact, model)
+    T_final = time.perf_counter() - t_tot
+    err_model = test_mesh(N_test, u_exact, model)
+    resultats.append(err_model)
+    temps.append(T_final)
 
-        resultats.append(err_model)
-        temps.append(T_final)
-
-        print(f"seed {seed:2d} | erreur L2 : {err_model:.4%} | temps : {T_final:.1f} s")
+    print(f"seed {seed:2d} | erreur L2 : {err_model:.4%} | temps : {T_final:.1f} s")
 
 #################
 # Statistiques sur l'ensemble des seeds
@@ -93,7 +92,6 @@ print(f"temps moyen : {np.mean(temps):.1f} s")
 # Sauvegarde des résultats
 #################
 os.makedirs("resultats", exist_ok=True)
-
 with open("resultats/train_adam.csv", "w") as f:
     f.write("optimizer,moyenne,mediane,std,min,max,runs_rates,temps_moyen")
     for seed in SEEDS:

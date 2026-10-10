@@ -53,8 +53,8 @@ architectures = {
     "5c x 32": [2, 32, 32, 32, 32, 32, 1],
     "5c x 40": [2, 40, 40, 40, 40, 40, 1],
     "5c x 50": [2, 50, 50, 50, 50, 50, 1],
-    "5c x 64": [2, 64, 64, 64, 64, 64, 1],
-}
+    "5c x 64": [2, 64, 64, 64, 64, 64, 1]}
+
 #################
 # fonction entrainement
 #################
@@ -73,7 +73,6 @@ def train(layers, seed, epochs):
                                 w_bc, w_pde, source_fn=source_fn)
         loss.backward()
         optimizer.step()
-
     err_model = test_mesh(N_test,u_exact,model)
 
     return err_model
@@ -92,12 +91,10 @@ for nom, layers in architectures.items():
     print(f"  std     : {erreurs.std()}   min/max : {erreurs.min()} / {erreurs.max()}")
     print(f"  runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
 
-
 #################
 # Sauvegarde des résultats
 #################
 os.makedirs("resultats", exist_ok=True)
-
 with open("resultats/architectures.csv", "w") as f:
     f.write("architecture,moyenne,mediane,std,min,max,runs_rates")
     f.write("\n")

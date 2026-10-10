@@ -114,7 +114,6 @@ for seed in SEEDS:
 
     T_final = time.perf_counter() - t_tot
     err_model = test_mesh(N_test, u_exact, model)
-
     resultats.append(err_model)
     temps.append(T_final)
 
@@ -125,7 +124,6 @@ for seed in SEEDS:
 #################
 erreurs = np.array(resultats)
 n_rates = (erreurs > 0.02).sum()
-
 print(f"\nmoyenne : {erreurs.mean():.4%}   médiane : {np.median(erreurs):.4%}")
 print(f"std     : {erreurs.std():.4%}   min/max : {erreurs.min():.4%} / {erreurs.max():.4%}")
 print(f"runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
