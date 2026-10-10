@@ -30,22 +30,22 @@ On distinguera 2 interprétations de résultats :
 | Architecture | Nombre de paramètres | Médiane | Écart-type | Runs (sur 30) avec > 2 % d'erreur |
 |:---:|:---:|:---:|:---:|:---:|
 | 5c × 64 | 16 897 | 0,47 % | $\color{red}{\text{2,41\%}}$ | 10
-| 5c × 50 | 10 501 | 0,42 % | 0,90 % | 7
-| 5c × 40 | 6 761 | 0,39 % | $\color{red}{\text{1,65\%}}$ | 6
+| 5c × 50 | 10 401 | 0,42 % | 0,90 % | 7
+| 5c × 40 | 6 721 | 0,39 % | $\color{red}{\text{1,65\%}}$ | 6
 | 5c × 32 | 4 353 | 0,47 % | $\color{red}{\text{1,31\%}}$ | 2
 | 5c × 16 | 1 153 | 0,55 % | 0,59 % | 2
 | 5c × 8 | 321 | $\color{red}{\text{0,80\%}}$ | $\color{green}{\text{0,32\%}}$ | 0
 | 4c × 64 | 12 737 | 0,38 % | $\color{red}{\text{1,76\%}}$ | 11
 | 4c × 50 (FAU) | 7 851 | 0,35 % | 0,91 % | 2
-| 4c × 40 | 5 121 | 0,51 % | $\color{red}{\text{1,87\%}}$ | 5
+| 4c × 40 | 5 081 | 0,51 % | $\color{red}{\text{1,87\%}}$ | 5
 | $\color{green}{\text{4c × 32}}$ | 3 297 | 0,33 % | 0,48 % | 1
-| 4c × 16 | 865 | 0,52 % | $\color{green}{\text{0,34\%}}$ | 0
+| 4c × 16 | 881 | 0,52 % | $\color{green}{\text{0,34\%}}$ | 0
 | 4c × 8 | 249 | $\color{red}{\text{0,98\%}}$ | $\color{green}{\text{0,40\%}}$ | 2
 | 3c × 64 | 8 577 | 0,31 % | 0,92 % | 1
 | 3c × 50 | 5 301 | 0,37 % | 0,69 % | 1
-| $\color{green}{\text{3c × 40}}$ | 3 481 | 0,37 % | 0,47 % | 1
+| $\color{green}{\text{3c × 40}}$ | 3 441 | 0,37 % | 0,47 % | 1
 | 3c × 32 | 2 241 | 0,41 % | 0,94 % | 4
-| 3c × 16 | 593 | 0,54 % | $\color{green}{\text{0,36\%}}$ | 1
+| 3c × 16 | 609 | 0,54 % | $\color{green}{\text{0,36\%}}$ | 1
 | 3c × 8 | 177 | $\color{red}{\text{1,12\%}}$ | 0,91 % | 3
 
 Dans ce cadre-là, on remarque que globalement (hors modèles de moins de 1000 paramètres, sujets à l'underfitting) **les modèles donnent un résultat satisfaisant, avec une médiane d'erreur inférieure à 0,6 %**. Ce qui les différencie, c'est leur stabilité.

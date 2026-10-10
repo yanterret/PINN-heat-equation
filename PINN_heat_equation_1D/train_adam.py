@@ -4,6 +4,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+import time
 import os
 
 #################
@@ -14,7 +15,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #################
 # importation des fonctions
 #################
-from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
+from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh,train
 
 #################
 # paramétres de la simulation
@@ -36,8 +37,9 @@ RESAMPLE_FREQ = 500
 #################
 # entrainement à seed fixe
 #################
-history = {'loss': [], 'l_bc': [], 'l_pde': []}
 
+history = {'loss': [], 'l_bc': [], 'l_pde': []}
+resultats = {}
 for seed in SEEDS:
 
     torch.manual_seed(seed)
@@ -66,5 +68,33 @@ for seed in SEEDS:
         history['l_pde'].append(l_pde.item())
 
         if epoch % RESAMPLE_FREQ == 0:
-            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}| Temps_tot: {time.perf_counter() - t_tot :.4e} ')
+            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
 
+    #################
+    # Visualisation des résultats
+    #################
+    T_final = time.perf_counter() - t_tot
+    err_model = test_mesh(N_test,u_exact,model)
+    resultats[seed] = err_model
+    n_rates = (err_model > 0.02).sum()
+    print(f'Temps_tot: {T_final :.4e}')
+    print(f"  moyenne : {err_model.mean()}   médiane : {np.median(err_model)}")
+    print(f"  std     : {err_model.std()}   min/max : {err_model.min()} / {err_model.max()}")
+    print(f"  runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
+
+#################
+# Sauvegarde des résultats
+#################
+os.makedirs("resultats", exist_ok=True)
+
+with open("resultats/train_adam.csv", "w") as f:
+    f.write("moyenne,mediane,std,min,max,runs_rates")
+    f.write("\n")
+    for erreurs in resultats.items():
+        f.write(f",{erreurs.mean():.6f}")
+        f.write(f",{np.median(erreurs):.6f}")
+        f.write(f",{erreurs.std():.6f}")
+        f.write(f",{erreurs.min():.6f}")
+        f.write(f",{erreurs.max():.6f}")
+        f.write(f",{(erreurs > 0.02).sum()}")
+        f.write("\n")

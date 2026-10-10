@@ -57,7 +57,8 @@ def closure():
 #################
 # entrainement à seed fixe
 #################
-history = {'loss': [], 'l_bc': [], 'l_pde': [], 'duree_adam_puis_tot':[]}
+history = {'loss': [], 'l_bc': [], 'l_pde': []}
+resultats = {}
 for seed in SEEDS:
 
     torch.manual_seed(seed)
@@ -72,7 +73,7 @@ for seed in SEEDS:
 
     # scheduler = technique cosine
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max,eta_min)
-    optimizer_lbfgs = torch.optim.LBFGS(model.parameters(),lr_lbfg=lr_lbfg,max_iter=max_iter, line_search_fn=line_search_fn )# max iter nombre d essais par step(), line_search_fn test pour avoir le bon lr 
+    optimizer_lbfgs = torch.optim.LBFGS(model.parameters(),lr=lr_lbfg,max_iter=max_iter, line_search_fn=line_search_fn )# max iter nombre d essais par step(), line_search_fn test pour avoir le bon lr 
 
     ################## 
     # boucle d'entrainement adam 
@@ -90,7 +91,9 @@ for seed in SEEDS:
         history['l_bc'].append(l_bc.item())
         history['l_pde'].append(l_pde.item())
         if epoch % RESAMPLE_FREQ == 0:
-            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}| Temps_tot: {time.perf_counter() - t_adam :.4e} ')
+            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
+    T_final_adam = time.perf_counter() - t_adam
+    print(f'Temps_tot: {T_final :.4e}')
 
     ################## 
     # boucle d'entrainement lbfgs 
@@ -106,4 +109,32 @@ for seed in SEEDS:
         history['l_pde'].append(l_pde.item())
 
         if epoch % RESAMPLE_FREQ_lbfg == 0:
-            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e} | Temps_tot: {time.perf_counter() - t_tot :.4e} ')
+            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
+    T_final = time.perf_counter() - t_tot
+    err_model = test_mesh(N_test,u_exact,model)
+    resultats[seed] = err_model
+    n_rates = (err_model > 0.02).sum()
+    print(f'Temps_tot: {T_final :.4e}')
+    print(f"  moyenne : {err_model.mean()}   médiane : {np.median(err_model)}")
+    print(f"  std     : {err_model.std()}   min/max : {err_model.min()} / {err_model.max()}")
+    print(f"  runs ratés (>2%) : {n_rates} / {len(SEEDS)}")
+    print(f'Temps_tot: {T_final :.4e}')
+
+
+#################
+# Sauvegarde des résultats
+#################
+os.makedirs("resultats", exist_ok=True)
+
+with open("resultats/train_adam_cosine_LBFGS.csv", "w") as f:
+    f.write("architecture,moyenne,mediane,std,min,max,runs_rates")
+    f.write("\n")
+    for nom, erreurs in resultats.items():
+        f.write(f"{nom}")
+        f.write(f",{erreurs.mean():.6f}")
+        f.write(f",{np.median(erreurs):.6f}")
+        f.write(f",{erreurs.std():.6f}")
+        f.write(f",{erreurs.min():.6f}")
+        f.write(f",{erreurs.max():.6f}")
+        f.write(f",{(erreurs > 0.02).sum()}")
+        f.write("\n")

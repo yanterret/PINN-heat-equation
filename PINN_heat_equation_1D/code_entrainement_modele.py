@@ -74,7 +74,7 @@ def train(layers, seed, epochs):
         loss.backward()
         optimizer.step()
 
-    err_model = test_mesh(model,N_test,u_exact)
+    err_model = test_mesh(N_test,u_exact,model)
 
     return err_model
 
