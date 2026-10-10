@@ -52,7 +52,8 @@ for seed in SEEDS:
 
     ################## 
     # boucle d'entrainement 
-    ##################    
+    ##################
+    t_tot = time.perf_counter()    
     for epoch in range(epochs):
 
         optimizer.zero_grad()
@@ -65,5 +66,5 @@ for seed in SEEDS:
         history['l_pde'].append(l_pde.item())
 
         if epoch % RESAMPLE_FREQ == 0:
-            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}')
+            print(f'Epoch {epoch:5d} | Loss: {loss.item():.4e} | BC: {l_bc.item():.4e} | PDE: {l_pde.item():.4e}| Temps_tot: {time.perf_counter() - t_tot :.4e} ')
 
