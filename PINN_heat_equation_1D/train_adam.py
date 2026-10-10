@@ -1,37 +1,31 @@
 #################
 # Libraries
 #################
-
 import torch
 import torch.nn as nn
 import numpy as np
-import matplotlib.pyplot as plt
+import os
 
 #################
 # Configuration de l'environnement de calcul 
 #################
-
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
 
 #################
 # importation des fonctions
 #################
-
 from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
 
 #################
 # paramétres de la simulation
 #################
-
 N_pde=5000
 N_CI=500
 N_CL=250
 w_bc=100.0
 w_pde=1.0
-
 epochs=3000
 N_test = 200
-
 SEEDS = [x for x in range(1, 11)]
 architecture  = [2, 32, 32, 32, 1]
 
@@ -42,7 +36,6 @@ RESAMPLE_FREQ = 500
 #################
 # entrainement à seed fixe
 #################
-
 history = {'loss': [], 'l_bc': [], 'l_pde': []}
 
 for seed in SEEDS:
@@ -54,14 +47,12 @@ for seed in SEEDS:
     #################
     # définition du modéle et de l'optimizer
     ##################    
-
     model = MLP(architecture).to(DEVICE)
     optimizer = torch.optim.Adam(model.parameters(), lr)
 
     ################## 
     # boucle d'entrainement 
     ##################    
-
     for epoch in range(epochs):
 
         optimizer.zero_grad()

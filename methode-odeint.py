@@ -29,3 +29,5 @@ S = odeint(discretisation, T0, Vt) # shape (nt, nx+1)
 X, T = np.meshgrid(Vx, Vt)
 
 erreur = np.sqrt(np.sum((S - exact(X, T))**2)) / np.sqrt(np.sum(exact(X, T)**2))
+
+print(f'erreurl2 relative: {erreur:.4%}')

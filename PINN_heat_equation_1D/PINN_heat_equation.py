@@ -1,24 +1,19 @@
 #################
 # Libraries
 #################
-
 import torch
 import torch.nn as nn
 import numpy as np
-import matplotlib.pyplot as plt
 
 #################
 # Configuration de l'environnement de calcul 
 #################
-
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
 
 #################
 # Réseaux de Neurones
 #################
-
 # création du réseaux de neurones
-
 class MLP(nn.Module):
     '''
     entrée : 
@@ -34,24 +29,22 @@ class MLP(nn.Module):
                 net.append(nn.Tanh())   
         self.net = nn.Sequential(*net) # on crée le réseau couches par couches en déballant la liste
 
+        #################
+        #on peut décider de mettre l initialisation xavier 
+        #################      
         # Initialisation avec égalisation des variance en back et foward prop 
         # pour éviter le gradient vanishing  (Xavier)
-
-        for m in self.net:   # on prends les sorties de chaque couches    
-            if isinstance(m, nn.Linear):  # ex : si tranh() = False si Linear = True (sorte de dtype) 
-                nn.init.xavier_normal_(m.weight)
-                nn.init.zeros_(m.bias)
+        #for m in self.net:   # on prends les sorties de chaque couches    
+        #    if isinstance(m, nn.Linear):  # ex : si tranh() = False si Linear = True (sorte de dtype) 
+        #        nn.init.xavier_normal_(m.weight)
+        #        nn.init.zeros_(m.bias)
 
     def forward(self, x):
         return self.net(x)
     
-def model(LAYERS):
-    return MLP(LAYERS).to(DEVICE)
-
 #################
 # Conditions aux limites
 #################
-
 #---------------------------------
 # remarques générales:
 # j'ai utilsé numpy mais c est faisable aussi avec des fonctions pytorch (à voir si il y a un gain de temps conséquend)
@@ -60,7 +53,6 @@ def model(LAYERS):
 # N_CI  = 500  points condition initiale source
 # N_CL  = 250  points par condition aux limites sur les bords
 #---------------------------------
-
 def points(seed, N_pde, N_CI, N_CL):
     '''
     entrée : 
@@ -110,12 +102,9 @@ def points(seed, N_pde, N_CI, N_CL):
 def source_fn(x_torch, t_torch):
     return (np.pi**2 - 1) * torch.exp(-t_torch) * torch.sin(np.pi * x_torch)
 
-
 #################
 # Fonction Cout 
 #################
-
-
 def loss_bc(model, x_bc, y_bc):
     """
     entrée :
@@ -194,7 +183,7 @@ def u_exact(x, t):
     """
     return np.exp(-t) * np.sin(np.pi * x)
 
-def test_mesh(N_test,u_exact):
+def test_mesh(N_test,u_exact,model):
     """
     entrée :
     N_test : int
@@ -207,14 +196,12 @@ def test_mesh(N_test,u_exact):
     t_test = np.linspace(0,  1, N_test)
 
     X, T_grid = np.meshgrid(x_test, t_test) # création de 2 matrices N_test*N_test (la grille)
-
     XT = torch.FloatTensor(np.stack([X.flatten(), T_grid.flatten()], axis=1)).to(DEVICE) # (N_test**2, 2)
     # résultat
     with torch.no_grad():
         T_pred = model(XT).cpu().numpy().reshape(N_test, N_test) 
 
     T_exact = u_exact(X, T_grid)
-
     err_l2 = (np.sqrt(np.mean((T_pred - T_exact)**2))/ np.sqrt(np.mean(T_exact**2)))
 
     return err_l2
