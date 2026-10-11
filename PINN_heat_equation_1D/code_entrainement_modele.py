@@ -34,7 +34,7 @@ N_test = 200
 lr=1e-3
 w_bc=100.0
 w_pde=1.0
-SEEDS = [x for x in range(1, 11)]
+SEEDS = [x for x in range(1, 31)]
 architectures = {
     "3c x 8":  [2, 8, 8, 8, 1],
     "3c x 16": [2, 16, 16, 16, 1],
