@@ -1,4 +1,4 @@
-liste des versions de bibliothéques pythons recommandées pour tester le code 
+# liste des versions de bibliothéques pythons recommandées pour tester le code 
 
 torch==2.12.1
 numpy==2.4.6

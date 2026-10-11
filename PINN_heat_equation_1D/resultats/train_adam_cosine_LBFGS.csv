@@ -1,0 +1,2 @@
+optimizer,moyenne,mediane,std,min,max,runs_rates,temps_moyen,seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10
+train_adam_cosine_LBFGS,0.000191,0.000184,0.000059,0.000106,0.000332,0,56.08,0.000189,0.000221,0.000208,0.000179,0.000106,0.000161,0.000161,0.000134,0.000224,0.000332

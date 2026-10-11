@@ -1,0 +1,2 @@
+optimizer,moyenne,mediane,std,min,max,runs_rates,temps_moyen,seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10
+adam,0.007140,0.003120,0.008526,0.001700,0.024709,2,15.44,0.001806,0.023472,0.003021,0.003219,0.002240,0.003670,0.001700,0.024709,0.004918,0.002643

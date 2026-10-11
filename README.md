@@ -18,9 +18,9 @@ En m'appuyant sur ce code de référence, j'ai acquis le squelette d'un PINN, pu
 
 **Protocole :** on prendra 30 seeds qui fixent les points de collocation dans le domaine, afin de mesurer les performances indépendamment d'un maillage particulier. Optimiseur Adam, sans Xavier.
 
-Un réseau est noté i c × j, avec i le nombre de couches cachées et j le nombre de neurones par couche. Le nombre de paramètres est calculé en sommant, sur chaque couche, la taille de la matrice des poids et le nombre de biais :
+Un réseau est noté ic * j, avec i le nombre de couches cachées et j le nombre de neurones par couche. Le nombre de paramètres est calculé en sommant, sur chaque couche, la taille de la matrice des poids et le nombre de biais :
 
-$dimension_{entrée} × dimension_{sortie} +$ Nombre de neurones
+$dimension_{entrée} * dimension_{sortie} +$ Nombre de neurones
 
 On distinguera 2 interprétations de résultats :
 
@@ -29,42 +29,42 @@ On distinguera 2 interprétations de résultats :
 
 | Architecture | Nombre de paramètres | Médiane | Écart-type | Runs (sur 30) avec > 2 % d'erreur |
 |:---:|:---:|:---:|:---:|:---:|
-| 5c × 64 | 16 897 | 0,47 % | $\color{red}{\text{2,41\%}}$ | 10
-| 5c × 50 | 10 401 | 0,42 % | 0,90 % | 7
-| 5c × 40 | 6 721 | 0,39 % | $\color{red}{\text{1,65\%}}$ | 6
-| 5c × 32 | 4 353 | 0,47 % | $\color{red}{\text{1,31\%}}$ | 2
-| 5c × 16 | 1 153 | 0,55 % | 0,59 % | 2
-| 5c × 8 | 321 | $\color{red}{\text{0,80\%}}$ | $\color{green}{\text{0,32\%}}$ | 0
-| 4c × 64 | 12 737 | 0,38 % | $\color{red}{\text{1,76\%}}$ | 11
-| 4c × 50 (FAU) | 7 851 | 0,35 % | 0,91 % | 2
-| 4c × 40 | 5 081 | 0,51 % | $\color{red}{\text{1,87\%}}$ | 5
-| $\color{green}{\text{4c × 32}}$ | 3 297 | 0,33 % | 0,48 % | 1
-| 4c × 16 | 881 | 0,52 % | $\color{green}{\text{0,34\%}}$ | 0
-| 4c × 8 | 249 | $\color{red}{\text{0,98\%}}$ | $\color{green}{\text{0,40\%}}$ | 2
-| 3c × 64 | 8 577 | 0,31 % | 0,92 % | 1
-| 3c × 50 | 5 301 | 0,37 % | 0,69 % | 1
-| $\color{green}{\text{3c × 40}}$ | 3 441 | 0,37 % | 0,47 % | 1
-| 3c × 32 | 2 241 | 0,41 % | 0,94 % | 4
-| 3c × 16 | 609 | 0,54 % | $\color{green}{\text{0,36\%}}$ | 1
-| 3c × 8 | 177 | $\color{red}{\text{1,12\%}}$ | 0,91 % | 3
+| 5c * 64 | 16 897 | 0,38 % | $\color{green}{\text{0,42\%}}$ | 0 |
+| 5c * 50 | 10 401 | 0,57 % | 0,74 % | 2 |
+| 5c * 40 | 6 721 | 0,57 % | $\color{red}{\text{1,09\%}}$ | 4 |
+| 5c * 32 | 4 353 | $\color{red}{\text{0,72\%}}$ | $\color{red}{\text{3,18\%}}$ | 7 |
+| 5c * 16 | 1 153 | $\color{red}{\text{0,63\%}}$ | $\color{red}{\text{1,05\%}}$ | 3 |
+| 5c * 8 | 321 | $\color{red}{\text{0,80\%}}$ | 0,39 % | 1 |
+| 4c * 64 | 12 737 | 0,25 % | $\color{red}{\text{2,05\%}}$ | 6 |
+| 4c * 50 (FAU) | 7 851 | 0,42 % | $\color{red}{\text{1,09\%}}$ | 5 |
+| 4c * 40 | 5 081 | 0,35 % | $\color{red}{\text{2,48\%}}$ | 5 |
+| 4c * 32 | 3 297 | 0,39 % | 0,62 % | 3 |
+| 4c * 16 | 881 | $\color{red}{\text{0,65\%}}$ | 0,91 % | 4 |
+| 4c * 8 | 249 | $\color{red}{\text{0,80\%}}$ | 0,34 % | 0 |
+| 3c * 64 | 8 577 | 0,24 % | 0,91 % | 3 |
+| 3c * 50 | 5 301 | 0,24 % | $\color{red}{\text{1,44\%}}$ | 5 |
+| $\color{green}{\text{3c * 40}}$ | 3 441 | 0,31 % | 0,82 % | 2 |
+| $\color{green}{\text{3c * 32}}$ | 2 241 | 0,32 % | 0,94 % | 3 |
+| 3c * 16 | 609 | 0,49 % | $\color{green}{\text{0,20\%}}$ | 0 |
+| 3c * 8 | 177 | $\color{red}{\text{0,85\%}}$ | 0,34 % | 0 |
 
-Dans ce cadre-là, on remarque que globalement (hors modèles de moins de 1000 paramètres, sujets à l'underfitting) **les modèles donnent un résultat satisfaisant, avec une médiane d'erreur inférieure à 0,6 %**. Ce qui les différencie, c'est leur stabilité.
+Dans ce cadre-là, on remarque que globalement (hors modèles de moins de 600 paramètres, sujets à l'underfitting) **les modèles donnent un résultat satisfaisant, avec une médiane d'erreur inférieure à 0,6 %**. Les exceptions 4c * 16, 5c * 16 et 5c * 32 sont des réseaux très étroits ou profonds donc des architectures à part. De plus, la stabilité permet de différencier ceux dont la précision est relativement égale.
 
-Grâce à cela, on remarque que le modèle **PINN de FAU a clairement des concurrents pour moins de temps de calcul, tels que le 4c × 32 ou le 3c × 40**, qui convergent certes vers un résultat quasiment identique (médianes à 0,37, 0,33 et 0,35 %) mais en étant plus sûrs de le faire (écarts-types de 0,47 et 0,48 % au lieu de 0,91 %).
+La principale caractéristique mise en avant est le fait que **la profondeur dégrade la précision**. En effet, pour toutes les largeurs de 16 neurones ou plus, la médiane est plus basse avec 3 couches qu'avec 5 (par exemple 0,32 % contre 0,72 % pour 32 neurones, et 0,24 % contre 0,57 % pour 50 neurones).
 
-On remarque aussi que **le modèle optimal est obtenu avec un nombre de neurones intermédiaire par couche en forme de U**.
+Grâce à cela, on remarque que le modèle **PINN de FAU (médiane 0,42 %, écart-type 1,09 %, 5 ratés) a clairement des concurrents pour moins de temps de calcul, tels que le 3c * 40 (0,31 %, 0,82 %, 2 ratés) ou le 3c * 32 (0,32 %, 0,94 %, 3 ratés)**, qui convergent vers un résultat meilleur au niveau des médianes mais aussi avec une meilleure certitude de le produire en comparant les écarts-types. Tout en sachant que ces modèles comptent 2,3 à 3,5 fois moins de paramètres.
 
 Modèles avec un nombre de paramètres **inférieur à 600 (underfitting)** :
-* 3c × 8 (161) : médiane 1,12 %
-* 4c × 8 (249) : médiane 0,98 %
-* 5c × 8 (321) : médiane 0,80 %
+* **3c * 8 (177) : médiane 0,85 %**
+* **4c * 8 (249) : médiane 0,80 %**
+* **5c * 8 (321) : médiane 0,80 %**
 
-Modèles avec un nombre de paramètres **supérieur à 1000, instables** :
-* 4c × 64 (12 993) : 11 ratés
-* 5c × 64 (17 153) : 10 ratés
-* 5c × 50 (10 501) : 7 ratés
+Modèles avec un nombre de paramètres supérieur à 10 000 :
+* **4c * 64 (12 737) : 6 ratés**
+* **5c * 64 (16 897) : 0 raté**
+* **5c * 50 (10 401) : 2 ratés**
 
-De plus, **la profondeur du réseau semble aggraver l'instabilité**, indépendamment du nombre de paramètres. À nombre de paramètres comparable (~7 000), le 3c × 64 reste stable (1 raté) tandis que le 5c × 40 se dégrade (6 ratés).
+À noter que le nombre de paramètres n'explique pas l'instabilité car le 3c * 64 rate 3 runs et le 5c * 40 en rate 4. Ainsi, les questions de profondeur et de largeurs doivent être prises en compte.
 
 ### Utilité de l'initialisation Xavier
 
@@ -73,18 +73,18 @@ La première chose qui m'a interpellé dans le code de la FAU a été l'initiali
 *nn.init.xavier_normal_(m.weight)*
 *nn.init.zeros_(m.bias)*
 
-Pour cela, j'ai reproduit le même protocole, mais avec 10 seeds différentes, sur le modèle initial FAU 4×50 :
+Pour cela, j'ai reproduit le même protocole, avec 10 seeds différentes (calculs sur CPU), sur le modèle initial FAU 4c * 50 :
 
-| Xavier | Médiane | Écart-type |
-|:---:|:---:|:---:|
-| Oui | 0,80 % | 1,47 %
-| Non | 0,37 % | 1,66 %
+| Xavier | Médiane | Écart-type | Runs (sur 10) avec > 2 % d'erreur |
+|:---:|:---:|:---:|:---:|
+| Oui | $\color{red}{\text{1,00\%}}$ | $\color{red}{\text{2,86\%}}$ | 3 |
+| Non | 0,38 % | 1,21 % | 1 |
 
-Xavier n'a pas d'influence ici or il sert normalement à faire décroître l'écart-type. En effet, il pest censé éviter le *gradient vanishing* dans les réseaux profonds. Or, sur un problème physique simple qui ne nécessite pas un gros réseau de neurones ce n'est pas le facteur limitant. Le solveur sera donc un sujet plus important à traiter. Xavier est donc retiré par la suite, pour économiser du temps de calcul (aussi minime soit-il).
+Xavier sert normalement à faire décroître l'écart-type. En effet, il est censé éviter le *gradient vanishing* dans les réseaux profonds. Or, sur ce problème, on remarque même qu'il dégrade la précision et la stabilité. Le solveur sera donc un sujet plus important à traiter. Xavier est donc retiré pour plus de précision et de stabilité des modèles.
 
 ### Test de deux solveurs
 
-Maintenant que l'on a vu que l'initialisation des poids a peu d'importance,j'ai pris le modéle (3c × 32) pour réduire le temps de calcul et testé la diférence de performance — en résultat et en temps de calcul — entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
+Maintenant que l'on a vu que le choix du solveur allait être un sujet plus important à traiter, j'ai pris le modèle (3c * 32) pour réduire le temps de calcul et testé la différence de performance — en résultat et en temps de calcul — entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
 
 Pour la 2ᵉ méthode, j'ai divisé mes 3000 epochs d'entraînement en 2 parties :
 
@@ -105,12 +105,12 @@ Sur 10 seeds, on obtient :
 
 || Adam seul | Adam + CosineAnnealingLR + L-BFGS |
 |:---:|:---:|:---:|
-| Médiane | 0,52 % | 0,02 %
-| Écart-type | 0,68 % | 0,01 %
-| Runs au-delà de 2 % d'erreur | 1 | 0
-| Temps moyen | 14 s | 64,2 s dont 49 s de L-BFGS
+| Médiane | 0,31 % | 0,018 % |
+| Écart-type | 0,85 % | 0,006 % |
+| Runs au-delà de 2 % d'erreur | 2 | 0 |
+| Temps moyen | 15,4 s | 56,1 s dont 40,7 s de L-BFGS |
 
-On remarque que CosineAnnealingLR permet de tomber à chaque fois dans la bonne cuve du minimum, avec un écart-type de 0,01 %, et que L-BFGS minimise bien la fonction de coût dans cette cuve. En revanche, le temps est quasiment multiplié par 4, ce qui peut être handicapant si le modèle doit résoudre un problème en temps réel. Finalement, on obtient **×4,58 de temps pour ×22 de précision** : ce sera le rôle de celui qui conçoit le modèle de réduire le nombre d'essais dans le solveur pour trouver un compromis.
+On remarque que CosineAnnealingLR permet de tomber à chaque fois dans la bonne cuve du minimum, avec un écart-type de 0,006 %, et que L-BFGS minimise bien la fonction de coût dans cette cuve. En revanche, le temps est multiplié par 3,6, ce qui peut être handicapant si le modèle doit résoudre un problème en temps réel. Finalement, on obtient **3,6 fois plus de temps pour 17 fois plus de précision**. Ainsi, ce sera le rôle de celui qui conçoit le modèle de réduire le nombre d'essais dans le solveur pour trouver un compromis.
 
 ## Le problème physique
 
@@ -162,7 +162,7 @@ Ainsi, le premier critère élimine ReLU, qui donne une dérivée seconde nulle 
 
 ##### Le choix des paramètres
 
-Ainsi, par backpropagation, on optimise les coefficients  $`\theta = (w^{k}_{ij}, b^{k}_{j})`$ du réseau pour que la sortie $y_{\theta}(x,t)$, qui dépend de ces mêmes paramètres, donne $y_{\theta}(x,t) \approx T(x,t)$.
+Ainsi, par backpropagation, on optimise les coefficients $`\theta = (w^{k}_{ij}, b^{k}_{j})`$ du réseau pour que la sortie $y_{\theta}(x,t)$, qui dépend de ces mêmes paramètres, donne $y_{\theta}(x,t) \approx T(x,t)$.
 
 Cette optimisation se fait par la minimisation des fonctions de coût suivantes, avec $d_{p}^{pde}$ qui correspond à $(x_{p},t_{p})$, où $p\in(0,N_{pde})$, qui constituent l'entrée du réseau, donc notre maillage fixe à l'intérieur du domaine :
 
@@ -193,11 +193,11 @@ Pour plus de lisibilité, j'ai découpé le code en plusieurs sections :
 
 ## Critique de la méthode par PINN
 
-On nuancera l'efficacité de cette méthode de résolution avec, par exemple, la **méthode odeint** vue dans l'UE MINI aux Arts et Métiers, qui servait déjà de méthode de référence. Dans ce cadre-là, on observe une erreur de 7,59·10⁻3 % en 14 lignes de code et moins d'une seconde de calcul.
+On nuancera l'efficacité de cette méthode de résolution avec, par exemple, la **méthode odeint** vue dans l'UE MINI aux Arts et Métiers, qui servait déjà de méthode de référence. Dans ce cadre-là, on observe une erreur de 7,59·10⁻³ % en 19 lignes de code et moins d'une seconde de calcul.
 
-Ce résultat est bien inférieur à celui de n'importe quel réseau entraîné : sur des problèmes simples, les méthodes traditionnelles (différences finies, discrétisations, odeint..) sont plus performantes. Les PINN sont eux plus intéressants sur des problèmes de dimension plus élevée ou lorsqu'on veut résoudre le problème inverse (on a le champ de température et on veut obtenir les constantes de l'équation de la chaleur).
+Ce résultat est bien inférieur à celui de n'importe quel réseau entraîné : sur des problèmes simples, les méthodes traditionnelles (différences finies, discrétisations, odeint...) sont plus performantes. Les PINN sont, eux, plus intéressants sur des problèmes de dimension plus élevée ou lorsqu'on veut résoudre le problème inverse (on a le champ de température et on veut obtenir les constantes de l'équation de la chaleur).
 
-Ce repo sert avant tout de tutoriel pour s'emparer des techniques de résolution par PINN pour ensuite s'attaquer à des problémes ou il sera pertinent de l'utiliser.
+Ce repo sert avant tout de tutoriel pour s'emparer des techniques de résolution par PINN pour ensuite s'attaquer à des problèmes où il sera pertinent de l'utiliser.
 
 ## Crédits et licence
 
