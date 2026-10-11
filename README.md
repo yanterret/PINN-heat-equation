@@ -1,4 +1,4 @@
-# PINN — Équation de la chaleur 1D
+# PINN Équation de la chaleur 1D
 
 Résolution de l'équation de la chaleur 1D par un réseau de neurones informé par la physique (Physics-Informed Neural Network), à partir du code tutoriel de la FAU.
 
@@ -84,7 +84,7 @@ Xavier sert normalement à faire décroître l'écart-type. En effet, il est cen
 
 ### Test de deux solveurs
 
-Maintenant que l'on a vu que le choix du solveur allait être un sujet plus important à traiter, j'ai pris le modèle (3c * 32) pour réduire le temps de calcul et testé la différence de performance — en résultat et en temps de calcul — entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
+Maintenant que l'on a vu que le choix du solveur allait être un sujet plus important à traiter, j'ai pris le modèle (3c * 32) pour réduire le temps de calcul et testé la différence de performance et en temps de calcul entre le solveur **Adam** et **Adam + CosineAnnealingLR + L-BFGS**.
 
 Pour la 2ᵉ méthode, j'ai divisé mes 3000 epochs d'entraînement en 2 parties :
 
