@@ -2,7 +2,7 @@ import numpy as np
 from scipy.integrate import odeint
 
 nx = 200                          # nombre de points en x 
-Vx = np.linspace(-1, 1, nx + 1)   # vecteur d espace
+Vx = np.linspace(-1, 1, nx + 1)   # vecteur d'espace
 Vt = np.linspace( 0, 1, nx + 1)   # vecteur de temps
 h  = Vx[1] - Vx[0]                 # pas d'espace
 
@@ -15,8 +15,8 @@ def exact(x, t):
 # discrétisation
 def discretisation(T, t):
     dT_dx2 = np.zeros_like(T)
-    # On applique l'équation seulement aux points de collocations
-    # T[0] et T[-1] restent à 0 (CI).
+    # On applique l'équation seulement aux points de collocation
+    # T[0] et T[-1] restent à 0 (CL).
     dT_dx2[1:-1] = (T[2:] - 2*T[1:-1] + T[:-2]) / h**2
     return dT_dx2 + source(Vx, t)
 

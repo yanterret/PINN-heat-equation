@@ -197,7 +197,7 @@ On nuancera l'efficacité de cette méthode de résolution avec, par exemple, la
 
 Ce résultat est bien inférieur à celui de n'importe quel réseau entraîné : sur des problèmes simples, les méthodes traditionnelles (différences finies, discrétisations, odeint...) sont plus performantes. Les PINN sont, eux, plus intéressants sur des problèmes de dimension plus élevée ou lorsqu'on veut résoudre le problème inverse (on a le champ de température et on veut obtenir les constantes de l'équation de la chaleur).
 
-Ce repo sert avant tout de tutoriel pour s'emparer des techniques de résolution par PINN pour ensuite s'attaquer à des problèmes où il sera pertinent de l'utiliser.
+Ce repo sert avant tout de tutoriel pour s'emparer des techniques de résolution par PINN pour ensuite s'attaquer à des problèmes où il sera pertinent de l'utiliser comme pour un jumeau numérique d'une piece faite en WAAM (mon projet dans le cadre de l'école).
 
 ## Crédits et licence
 

@@ -18,7 +18,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
 
 #################
-# paramétres de la simulation
+# paramètres de la simulation
 #################
 N_pde=5000
 N_CI=500
@@ -30,7 +30,7 @@ N_test = 200
 SEEDS = [x for x in range(1, 11)]
 architecture  = [2, 32, 32, 32, 1]
 
-# paramétres adam
+# paramètres adam
 lr=1e-3
 RESAMPLE_FREQ = 500
 
@@ -48,7 +48,7 @@ for seed in SEEDS:
     x_pde_d, x_bc_d, y_bc_d = points(seed, N_pde, N_CI, N_CL)   
 
     #################
-    # définition du modéle et de l'optimizer
+    # définition du modèle et de l'optimizer
     ##################    
     model = MLP(architecture).to(DEVICE)
     optimizer = torch.optim.Adam(model.parameters(), lr)

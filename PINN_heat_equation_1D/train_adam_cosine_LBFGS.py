@@ -18,7 +18,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
 
 #################
-# paramétres de la simulation
+# paramètres de la simulation
 ################
 N_pde=5000
 N_CI=500
@@ -30,7 +30,7 @@ N_test = 200
 SEEDS = [x for x in range(1, 11)]
 architecture  = [2, 32, 32, 32, 1]
 
-# paramétres lbfg
+# paramètres lbfg
 epochs_lbfg = 100
 eta_min = 1e-5
 T_max = epochs_tot
@@ -39,7 +39,7 @@ max_iter=20
 line_search_fn='strong_wolfe'
 RESAMPLE_FREQ_lbfg = 20
 
-# paramétres adam
+# paramètres adam
 lr=1e-3
 RESAMPLE_FREQ = 500
 epochs_adam = epochs_tot - epochs_lbfg
@@ -47,7 +47,7 @@ epochs_adam = epochs_tot - epochs_lbfg
 #################
 # Fonction inhérente à l'utilisation de lbfgs
 #################
-# recalcul la backprop pour que lbfgs choississe la bonne valeur
+# recalcule la backprop pour que lbfgs choisisse la bonne valeur
 def closure():
     optimizer_lbfgs.zero_grad()
     loss, _, _ = total_loss(model, x_bc_d, y_bc_d, x_pde_d, w_bc, w_pde, source_fn=source_fn)
@@ -67,14 +67,14 @@ for seed in SEEDS:
     x_pde_d, x_bc_d, y_bc_d = points(seed, N_pde, N_CI, N_CL)
 
     #################
-    # définition du modéle et des optimizers
+    # définition du modèle et des optimizers
     #################
     model= MLP(architecture).to(DEVICE)
     optimizer= torch.optim.Adam(model.parameters(), lr)
 
     # scheduler = technique cosine
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max,eta_min)
-    optimizer_lbfgs = torch.optim.LBFGS(model.parameters(),lr=lr_lbfg,max_iter=max_iter, line_search_fn=line_search_fn )# max iter nombre d essais par step(), line_search_fn test pour avoir le bon lr 
+    optimizer_lbfgs = torch.optim.LBFGS(model.parameters(),lr=lr_lbfg,max_iter=max_iter, line_search_fn=line_search_fn )# max iter nombre d'essais par step(), line_search_fn test pour avoir le bon lr 
 
     ################## 
     # boucle d'entrainement adam 
@@ -105,7 +105,7 @@ for seed in SEEDS:
         loss, l_bc, l_pde = total_loss(model, x_bc_d, y_bc_d, x_pde_d, w_bc, w_pde,source_fn=source_fn)
 
         
-        history['loss'].append(loss.item()) #.item() pour donner un int 
+        history['loss'].append(loss.item()) #.item() pour donner un float 
         history['l_bc'].append(l_bc.item())
         history['l_pde'].append(l_pde.item())
 

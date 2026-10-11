@@ -1,8 +1,8 @@
 
 #---------------------------------
 # remarques générales:
-# ce code a servi et à été conçu pour comparer plusieurs architectures de réseaux de neurones
-# il ne fait pas donc pas de bilan partiels tout les n epochs car servait à comparer uniquement les résulats post entrainement 
+# ce code a servi et a été conçu pour comparer plusieurs architectures de réseaux de neurones
+# il ne fait donc pas de bilans partiels tous les n epochs car servait à comparer uniquement les résultats post entrainement 
 #---------------------------------
 
 #################
@@ -24,7 +24,7 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from PINN_heat_equation import MLP,total_loss,source_fn,u_exact,points,test_mesh
 
 #################
-# paramétres de la simulation
+# paramètres de la simulation
 #################
 N_pde=5000
 N_CI=500
